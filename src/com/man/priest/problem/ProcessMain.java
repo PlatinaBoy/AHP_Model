@@ -69,14 +69,14 @@ public class ProcessMain {
         Criterion goal2 = problem.addCriteria("c");
         Criterion goal3 = problem.addCriteria("d");
         Criterion goal4 = problem.addCriteria("e");
-        //家庭情况3*3行列式
+        //情况1   3*3行列式
         Criterion goal00 = goal0.addCriterion("f");
         Criterion goal01 = goal0.addCriterion("g");
         Criterion goal02 = goal0.addCriterion("h");
-        //医保2*2行列式
+        //情况2   2*2行列式
         Criterion goal10 = goal1.addCriterion("i");
         Criterion goal11 = goal1.addCriterion("g");
-        //收支3*3行列式
+        //情况3  3*3行列式
         Criterion goal20 = goal2.addCriterion("k");
         Criterion goal21 = goal2.addCriterion("l");
         Criterion goal22 = goal2.addCriterion("m");
@@ -91,10 +91,10 @@ public class ProcessMain {
         Criterion goal211 = goal2.addCriterion("v");
 
 
-        //借贷款行列式2*2
+        //情况4   行列式2*2
         Criterion goal30 = goal3.addCriterion("w");
         Criterion goal31 = goal3.addCriterion("x");
-        //资产行列式4*4
+        //情况5   行列式4*4
         Criterion goal40 = goal4.addCriterion("y");
         Criterion goal41 = goal4.addCriterion("z");
         Criterion goal42 = goal4.addCriterion("z1");
@@ -113,16 +113,16 @@ public class ProcessMain {
                 {2.0D, 1.0D, 0.5D, 1.0D, 1.0D},
                 {2.0D, 1.0D, 0.5D, 1.0D, 1.0D}}));
         //以下为因素层判断矩阵
-        //家庭情况准则权重
+        //情况1准则权重
         goal0.setPCMatrix(new PCMatrix(new double[][]{
                 {1.0D, 1.0D, 1.0D},
                 {1.0D, 1.0D, 1.0D},
                 {1.0D, 1.0D, 1.0D}}));
-        //医保准则权重
+        //情况2准则权重
         goal1.setPCMatrix(new PCMatrix(new double[][]{
                 {1.0D, 0.5D},
                 {2.0D, 1.0D}}));
-        //收支情况准则权重值(收入花费平台筹款)
+        //情况3准则权重值(收入花费平台筹款)
         goal2.setPCMatrix(new PCMatrix(new double[][]{
                 {1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1 / 3D},
                 {1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D},
@@ -136,11 +136,11 @@ public class ProcessMain {
                 {1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D},
                 {1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D},
                 {3.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D}}));
-        //借贷情况准则权重值
+        //情况4情况准则权重值
         goal3.setPCMatrix(new PCMatrix(new double[][]{
                 {1.0D, 1.0D},
                 {1.0D, 1.0D}}));
-        //资产情况准则权重值
+        //情况5准则权重值
         goal4.setPCMatrix(new PCMatrix(new double[][]{
                 {1.0D, 1.0D, 0.2D, 0.2D},
                 {1.0D, 1.0D, 0.2D, 0.2D},
@@ -196,7 +196,7 @@ public class ProcessMain {
         String result3 = String.format(String.format("%.2f", inOutComeScore));
         String result4 = String.format(String.format("%.2f", loanScore));
         String result5 = String.format(String.format("%.2f", assetSorce));
-        String everyScore = "家庭评分：" + result1 + "疾病程度" + result2 + "收支情况" + result3 + "借贷情况" + result4 + "资产情况" + result5;
+        String everyScore = "情况1：" + result1 + "情况2" + result2 + "情况3" + result3 + "情况4" + result4 + "情况5" + result5;
         HashMap<String, Object> stringObjectHashMap = new HashMap<>();
         Object dproblem = stringObjectHashMap.put("Dproblem", problem);
         Object allScore = stringObjectHashMap.put("everyScore", everyScore);
@@ -209,10 +209,10 @@ public class ProcessMain {
 
 
     //根据输入数据，进行评分，评分细则
-    //家庭评分细则
+    //情况1评分细则
     private static double[] getScoreByFamily(DataRecord ss) {
         double[] res = {0.0D, 0.0D, 0.0D};
-        //户籍类型评分细则
+        //情况1.1评分细则
         switch (ss.getRegister()) {
             case 2:
                 res[0] = 0.0D
@@ -229,7 +229,7 @@ public class ProcessMain {
             default:
                 res[0] = 0.0D;
         }
-        //家庭成员评分细则
+        //情况1.2评分细则
         String relative = ss.getRelative() == null ? "" : ss.getRelative();
         if ((relative.contains("父亲")) || (relative.contains("母亲"))) {
             res[1] = 0.0D;
@@ -243,7 +243,7 @@ public class ProcessMain {
         } else {
             res[1] = 0.0D;
         }
-        //家庭成员学历评分细则
+        //情况1.3评分细则
         String eduication = ss.getEducation() == null ? "" : ss.getEducation();
         if (eduication.contains("博士")) {
             res[2] = 0.0D;
@@ -261,9 +261,9 @@ public class ProcessMain {
         return res;
     }
 
-    //疾病医保评分细则
+    //情况2保评分细则
     private static double[] getScoreByDisease(DataRecord ss) {
-        //医保评分细则
+        //情况2评分细则
         double[] res = {0.0D, 0.0D};
         String medicare = ss.getMedicare() == null ? "" : ss.getMedicare();
         if (medicare.contains("城镇医保")) {
@@ -276,20 +276,20 @@ public class ProcessMain {
             res[0] = 0.0D;
         }
         if (ss.getHasComInsurance() == null) {
-            res[1] = 10.0D;
+            res[1] = 0D;
         } else if (ss.getHasComInsurance()) {
-            res[1] = 4.0D;
+            res[1] = 0D;
         } else {
-            res[1] = 2.0D;
+            res[1] = 0D;
         }
         return res;
     }
 
-    //收入评分细则
+    //情况3评分细则
     private static double[] getScoreByInOutCome(DataRecord ss) {
         double[] res = {0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D};
-        //收入评分细则
-        //积蓄
+   
+        //情况3.1
         if (ss.getYearlyIncome() == null) {
             res[0] = 0.0D;
         } else if (ss.getYearlyIncome() > 100000) {
@@ -317,7 +317,7 @@ public class ProcessMain {
         } else {
             res[0] = 0.0D;
         }
-        //固定工作-年收入
+        //情况3.2
         String fixedYearIncome = ss.getFixedYearIncome() == null ? "" : ss.getFixedYearIncome();
         if (ss.getFixedYearIncome() == null) {
             res[1] = 0.0D;
@@ -334,7 +334,7 @@ public class ProcessMain {
         } else {
             res[1] = 0.0D;
         }
-        //打零工-年收入 字段无值无字典表*******
+        //情况3.3 字段无值无字典表*******
         String dayJobYearIncome = ss.getDayJobYearIncome() == null ? "" : ss.getDayJobYearIncome();
         if (ss.getDayJobYearIncome() == null) {
             res[2] = 0.0D;
@@ -351,7 +351,7 @@ public class ProcessMain {
         } else {
             res[2] = 0.0D;
         }
-        //种地收入
+        //情况3.4
         String farmIncome = ss.getFarmIncome() == null ? "" : ss.getFarmIncome();
         if (ss.getFarmIncome() == null) {
             res[3] = 0.0D;
@@ -368,7 +368,7 @@ public class ProcessMain {
         } else {
             res[3] = 0.0D;
         }
-        // 养殖收入
+        // 情况3.5
         String cultureIncome = ss.getCultureIncome() == null ? "" : ss.getCultureIncome();
         if (ss.getCultureIncome() == null) {
             res[4] = 0.0D;
@@ -385,7 +385,7 @@ public class ProcessMain {
         } else {
             res[4] = 0.0D;
         }
-        //其他收入-退休金
+        //情况3.6
         String otherIncomeWithPension = ss.getOtherIncomeWithPension() == null ? "" : ss.getOtherIncomeWithPension();
         if (ss.getOtherIncomeWithPension() == null) {
             res[5] = 0.0D;
@@ -400,7 +400,7 @@ public class ProcessMain {
         } else {
             res[5] = 0.0D;
         }
-        //其他收入-低保金
+        //情况3.7
         String otherIncomeWithLowGold = ss.getOtherIncomeWithLowGold() == null ? "" : ss.getOtherIncomeWithLowGold();
         if (ss.getOtherIncomeWithLowGold() == null) {
             res[6] = 0.0D;
@@ -415,7 +415,7 @@ public class ProcessMain {
         } else {
             res[6] = 0.0D;
         }
-        //其他收入-租金
+        //情况3.8
         String otherIncomeWithRental = ss.getOtherIncomeWithRental() == null ? "" : ss.getOtherIncomeWithRental();
         if (ss.getOtherIncomeWithRental() == null) {
             res[7] = 0.0D;
@@ -465,7 +465,7 @@ public class ProcessMain {
             }
         }
 
-        //疑似贷款
+        //情况4
         switch (ss.getDonation()) {
             case 0:
                 res[11] = 0.0D;
@@ -490,7 +490,7 @@ public class ProcessMain {
         return res;
     }
 
-    //借贷款评分细则
+    //情况5
     private static double[] getScoreByLoan(DataRecord ss) {
         double[] res = {0.0D, 0.0D};
         if (ss.getHasLoan() == null) {
@@ -522,7 +522,7 @@ public class ProcessMain {
         return res;
     }
 
-    //固定资产评分细则
+    //情况6细则
     private static double[] getScoreByAsset(DataRecord ss) {
         double[] res = {0.0D, 0.0D, 0.0D, 0.0D};
         if (ss.isHasHouse() == null) {
